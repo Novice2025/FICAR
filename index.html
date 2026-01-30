@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>NEXTATION – FICAR (stay, become, keep, be, sleep over, hook up)</title>
+  <style>
+    :root {
+      /* Core backgrounds – from NEXTATION WEBSITE — COLOUR SYSTEM */
+      --bg-main: #02030b; /* Page background */
+      --bg-gradient: radial-gradient(circle at top, #1c1f3b 0%, #050716 45%, #02030b 100%);
+      /* Surfaces / Cards */
+      --card-bg: rgba(15, 18, 40, 0.92); /* Lesson panels */
+      --card-soft-bg: rgba(18, 21, 50, 0.88); /* Tab cards and navigation buttons */
+      /* Neon accents */
+      --accent-cyan: #4ef2ff;  /* Cyan highlight around edges */
+      --accent-pink: #ff2f92;  /* Magenta highlight for buttons */
+      --accent-green: #4dff9b; /* Success / tab completed mark */
+      --accent-yello: #ffe25f; /* Accent blended in text gradients */
+      --accent-purple: #aa5dff;/* Hover glows and edges */
+      /* Text and borders */
+      --muted: rgba(255,255,255,0.65);
+      --border-glow: rgba(120,120,255,0.45);
+      /* Shadows */
+      --shadow-strong: 0 0 36px rgba(130,80,255,0.6);
+      --shadow-soft: 0 0 20px rgba(0,0,0,0.65);
+      /* Radii and transitions */
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      --transition-fast: 0.18s ease-out;
+      --transition-med: 0.28s ease-out;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+      background:var(--bg-gradient);
+      color:#fff;
+      min-height:100vh;
+      padding:24px;
+      display:flex;
+      justify-content:center;
+    }
+    .app{max-width:1100px;width:100%;}
+
+    /* HEADER */
+    .neon-header{
+      position:relative;
+      padding:18px 22px 14px;
+      border-radius:var(--radius-lg);
+      background:rgba(3,5,20,0.9);
+      box-shadow:var(--shadow-soft);
+      border:1px solid var(--border-glow);
+      margin-bottom:20px;
+      overflow:hidden;
+    }
+    .neon-header::before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      background:linear-gradient(90deg,#00f5ff,#ff2f92,#ffe25f,#4dff9b);
+      opacity:0.5;
+      mix-blend-mode:screen;
+      pointer-events:none;
+      z-index:-1;
+    }
+    .header-main{
+      display:flex;
+      align-items:center;
+      gap:18px;
+    }
+    .teacher-orb{
+      width:64px;
+      height:64px;
+      border-radius:50%;
+      background:radial-gradient(circle,#ffffff 0%,#00fff0 35%,#ff2f92 70%,#02030b 100%);
+      box-shadow:0 0 24px rgba(0,255,255,0.7),0 0 32px rgba(255,0,160,0.55);
+      flex-shrink:0;
+    }
+    .brand-title{
+      font-size:1.4rem;
+      background:linear-gradient(90deg,#4ef2ff,#ff2f92);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-weight:700;
+      letter-spacing:0.06em;
+      text-transform:uppercase;
+    }
+    .brand-sub{
+      color:var(--muted);
+      font-size:0.9rem;
+      margin-top:2px;
+    }
+    .lesson-title{
+      margin-top:10px;
+      font-size:1.25rem;
+      color:var(--accent-cyan);
+      text-shadow:0 0 12px rgba(78,242,255,0.5);
+    }
+    .controls-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:10px;
+      font-size:0.9rem;
+    }
+    .small-btn{
+      padding:6px 12px;
+      border-radius:999px;
+      border:1px dashed rgba(255,255,255,0.35);
+      background:transparent;
+      color:#fff;
+      cursor:pointer;
+      font-size:0.8rem;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      transition:transform var(--transition-fast),box-shadow var(--transition-fast),border-color var(--transition-fast),background var(--transition-fast);
+    }
+    .small-btn:hover{
+      transform:scale(1.03);
+      border-color:var(--accent-cyan);
+      box-shadow:0 0 16px rgba(78,242,255,0.5);
+      background:rgba(4,10,40,0.9);
+    }
+
+    /* TABS */
+    .tabs{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin:18px 0 16px;
+    }
+    .tab{
+      position:relative;
+      padding:9px 14px;
+      border-radius:var(--radius-md);
+      background:radial-gradient(circle at top,rgba(255,255,255,0.09),rgba(7,10,28,0.96));
+      border:1px solid rgba(130,140,200,0.4);
+      color:#fff;
+      font-size:0.9rem;
+      cursor:pointer;
+      transition:all var(--transition-fast);
+    }
+    .tab span.icon{margin-right:6px;}
+    .tab:hover{
+      border-color:rgba(120,120,255,0.6);
+      box-shadow:0 0 20px rgba(120,120,255,0.35);
+    }
+    .tab.active{
+      background:radial-gradient(circle at top,rgba(255,255,255,0.15),rgba(21,13,51,0.98));
+      border-color:rgba(103,255,196,0.9);
+      box-shadow:0 0 24px rgba(79,255,204,0.55);
+    }
+    .tab.completed::after{
+      content:"✓";
+      position:absolute;
+      top:-6px;
+      right:-6px;
+      width:18px;
+      height:18px;
+      border-radius:50%;
+      background:var(--accent-green);
+      color:#02030b;
+      font-size:0.7rem;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 0 10px rgba(77,255,179,0.9);
+    }
+
+    /* CARD */
+    .card{
+      position:relative;
+      border-radius:var(--radius-lg);
+      background:linear-gradient(135deg, rgba(13,16,40,0.98), rgba(6,8,26,0.98));
+      padding:20px 22px 22px;
+      border:1px solid rgba(120,120,255,0.32);
+      box-shadow:var(--shadow-soft);
+      overflow:hidden;
+      min-height:260px;
+    }
+    .card::before{
+      content:"";
+      position:absolute;
+      top:-40%;
+      left:-20%;
+      width:280px;
+      height:280px;
+      background:radial-gradient(circle at top left, rgba(87,57,255,0.35), transparent 58%);
+      pointer-events:none;
+    }
+    .card-inner{position:relative;z-index:1;}
+
+    /* CONTENT STYLES */
+    h2.section-title{
+      font-size:1.1rem;
+      color:var(--accent-cyan);
+      margin-bottom:4px;
+    }
+    .section-sub{
+      font-size:0.9rem;
+      color:var(--muted);
+      margin-bottom:12px;
+      line-height:1.6;
+    }
+    .highlight-expression{
+      display:inline-flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:linear-gradient(120deg, var(--accent-yello), var(--accent-pink), var(--accent-cyan));
+      color:#050618;
+      font-weight:700;
+      margin:8px 0 12px;
+    }
+    .pill-tag{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:5px 10px;
+      border-radius:999px;
+      background:linear-gradient(90deg,rgba(0,0,0,0.75),rgba(28,32,80,0.95));
+      border:1px solid rgba(78,242,255,0.6);
+      font-size:0.8rem;
+      color:#fff;
+    }
+    .play-btn{
+      padding:4px 10px;
+      border-radius:999px;
+      border:1px dashed rgba(255,255,255,0.4);
+      background:rgba(0,0,0,0.35);
+      color:#fff;
+      font-size:0.8rem;
+      cursor:pointer;
+      margin-top:4px;
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+    }
+    .play-btn:hover{
+      border-color:var(--accent-cyan);
+      box-shadow:0 0 12px rgba(78,242,255,0.5);
+    }
+    .sub-block{
+      margin-top:12px;
+      padding:10px 12px;
+      border-radius:var(--radius-md);
+      background:rgba(6,10,40,0.9);
+      border:1px solid rgba(120,120,255,0.3);
+    }
+    .sub-title{
+      font-size:0.95rem;
+      color:var(--accent-green);
+      margin-bottom:6px;
+    }
+    .example-en{
+      font-family:"Segoe UI",system-ui;
+      font-size:0.9rem;
+      margin-bottom:4px;
+    }
+    .example-pt{
+      font-size:0.85rem;
+      color:var(--muted);
+      line-height:1.7;
+    }
+    .good{color:var(--accent-green);font-weight:600;}
+    .bad{color:#ff8da1;font-weight:600;}
+    ul,ol{padding-left:18px;margin:6px 0;}
+    li{font-size:0.88rem;margin-bottom:3px;}
+
+    .two-cols{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+    }
+    .col{
+      flex:1 1 260px;
+    }
+
+    .textarea-wrap{
+      margin-top:10px;
+      border-radius:var(--radius-md);
+      overflow:hidden;
+      border:1px solid rgba(120,120,255,0.35);
+      background:rgba(4,7,26,0.9);
+    }
+    textarea{
+      width:100%;
+      min-height:130px;
+      border:none;
+      padding:10px 12px;
+      background:transparent;
+      color:#fff;
+      font-family:inherit;
+      font-size:0.9rem;
+      resize:vertical;
+    }
+    textarea:focus{outline:none;}
+    .char-counter{
+      text-align:right;
+      font-size:0.78rem;
+      padding:3px 8px 5px;
+      color:var(--muted);
+      background:rgba(0,0,0,0.6);
+    }
+
+    .practice-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:flex-start;
+      margin-top:12px;
+    }
+    .record-btn{
+      padding:8px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.4);
+      background:rgba(0,0,0,0.4);
+      color:#fff;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:0.9rem;
+    }
+    .record-btn.recording{
+      border-color:var(--accent-pink);
+      box-shadow:0 0 16px rgba(255,47,146,0.8);
+      background:rgba(80,0,40,0.9);
+    }
+    .audio-wrapper{
+      flex:1 1 220px;
+      font-size:0.8rem;
+      color:var(--muted);
+      line-height:1.6;
+    }
+    .delete-btn{
+      margin-top:4px;
+      padding:4px 10px;
+      font-size:0.76rem;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.3);
+      background:transparent;
+      color:#fff;
+      cursor:pointer;
+    }
+
+    .footer-nav{
+      margin-top:16px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .primary-btn,.secondary-btn{
+      flex:1;
+      padding:10px 14px;
+      border-radius:var(--radius-md);
+      border:1px solid rgba(140,140,255,0.8);
+      background:linear-gradient(120deg,rgba(40,15,80,0.95),rgba(10,10,40,0.95));
+      color:#fff;
+      font-size:0.9rem;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+    }
+    .primary-btn{
+      border-color:rgba(103,255,196,0.9);
+      background:linear-gradient(120deg,rgba(10,60,60,0.98),rgba(10,15,45,0.98));
+    }
+    .primary-btn:hover{
+      box-shadow:0 0 22px rgba(79,255,204,0.65);
+    }
+    .secondary-btn:hover{
+      box-shadow:0 0 18px rgba(150,120,255,0.65);
+    }
+
+    .export-bar{
+      margin-top:14px;
+      font-size:0.8rem;
+      color:var(--muted);
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+    }
+    .footer-meta{
+      margin-top:10px;
+      font-size:0.8rem;
+      color:var(--muted);
+    }
+    .brand{
+      color:var(--accent-cyan);
+      font-weight:600;
+    }
+
+    @media print{
+      body{
+        background:#fff;
+        color:#000;
+      }
+      .neon-header,
+      .tabs,
+      .footer-nav,
+      .export-bar,
+      .controls-row{
+        display:none !important;
+      }
+      .card{
+        box-shadow:none;
+        border:1px solid #ccc;
+        background:#fff;
+      }
+      .card::before{display:none;}
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="neon-header">
+    <div class="header-main">
+      <div class="teacher-orb"></div>
+      <div>
+        <div class="brand-title">NEXTATION</div>
+        <div class="brand-sub">FICAR – multi-meaning survival guide para brasileiros</div>
+        <div class="lesson-title">
+          FICAR = stay · become · keep · be · sleep over · hook up 😵‍💫
+        </div>
+      </div>
+    </div>
+    <div class="controls-row">
+      <button class="small-btn" onclick="window.print()">📄 Exportar em PDF</button>
+      <button class="small-btn" onclick="copyToSpreadsheet()">📋 Copiar conteúdo para planilha</button>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Lesson tabs">
+    <button class="tab active" data-tab="overview" onclick="showTab('overview')" aria-selected="true">
+      <span class="icon">🧠</span> Overview
+    </button>
+    <button class="tab" data-tab="stay" onclick="showTab('stay')" aria-selected="false">
+      <span class="icon">🛋️</span> FICAR = STAY / REMAIN
+    </button>
+    <button class="tab" data-tab="become" onclick="showTab('become')" aria-selected="false">
+      <span class="icon">⚡</span> FICAR = BECOME / GET
+    </button>
+    <button class="tab" data-tab="keep" onclick="showTab('keep')" aria-selected="false">
+      <span class="icon">🧷</span> FICAR = KEEP
+    </button>
+    <button class="tab" data-tab="place" onclick="showTab('place')" aria-selected="false">
+      <span class="icon">📍</span> FICAR = BE (location)
+    </button>
+    <button class="tab" data-tab="sleep" onclick="showTab('sleep')" aria-selected="false">
+      <span class="icon">🛏️</span> Sleep over / stay over
+    </button>
+    <button class="tab" data-tab="hookup" onclick="showTab('hookup')" aria-selected="false">
+      <span class="icon">💋</span> Ficar com alguém
+    </button>
+    <button class="tab" data-tab="situations" onclick="showTab('situations')" aria-selected="false">
+      <span class="icon">🎬</span> Situações reais
+    </button>
+    <button class="tab" data-tab="write" onclick="showTab('write')" aria-selected="false">
+      <span class="icon">✍️</span> Write it
+    </button>
+    <button class="tab" data-tab="practice" onclick="showTab('practice')" aria-selected="false">
+      <span class="icon">🎙️</span> Speak it
+    </button>
+  </nav>
+
+  <main class="card">
+    <!-- OVERVIEW -->
+    <section class="card-inner" id="tab-overview">
+      <h2 class="section-title">1. Overview – por que FICAR destrói o inglês 😅</h2>
+      <p class="section-sub">
+        Em português, <strong>FICAR</strong> é tipo um canivete suíço: você usa pra tudo.  
+        Em inglês, se você tentar traduzir sempre como “stay” ou “be”, vai ficar tudo estranho.
+      </p>
+
+      <div class="highlight-expression">
+        FICAR = <span>STAY</span> · <span>BECOME / GET</span> · <span>KEEP</span> · <span>BE (location)</span> · <span>SLEEP OVER</span> · <span>HOOK UP</span>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-title">1.1. Mantra pro cérebro brasileiro</div>
+        <p class="example-pt">
+          Toda vez que seu cérebro pensar em <strong>ficar</strong>, pergunte:
+        </p>
+        <ul>
+          <li><strong>Ficar onde?</strong> → lugar → <span class="good">stay / be</span></li>
+          <li><strong>Ficar como?</strong> (triste, feliz, bravo, doente) → mudança de estado → <span class="good">become / get</span></li>
+          <li><strong>Ficar com algo?</strong> (guardar, manter) → <span class="good">keep</span></li>
+          <li><strong>Ficar onde mora?</strong> (casa, empresa) → localização fixa → <span class="good">be / is / are located</span></li>
+          <li><strong>Ficar na casa de alguém?</strong> → dormir lá → <span class="good">sleep over / stay over</span></li>
+          <li><strong>Ficar com alguém?</strong> (beijar / rolar algo) → <span class="good">hook up / make out / see someone</span></li>
+        </ul>
+        <p class="example-pt">
+          Esquece a tradução literal. Pense no <strong>significado da cena</strong>. É isso que manda no inglês. É nosso. 😉
+        </p>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-title">1.2. Erros típicos de brasileiro com FICAR</div>
+        <p class="example-en">
+          <span class="bad">I stayed sad.</span> ❌ (tradução literal de “eu fiquei triste”)<br>
+          <span class="good">I got sad.</span> ✅<br><br>
+          <span class="bad">My house stays in São Paulo.</span> ❌<br>
+          <span class="good">My house is in São Paulo.</span> ✅<br><br>
+          <span class="bad">Can I stay in your house?</span> (contexto “dormir”) 🤨<br>
+          <span class="good">Can I sleep over at your place?</span> ✅ (ficar lá, dormir)
+        </p>
+        <button class="play-btn" onclick="speak('I got sad. My house is in São Paulo. Can I sleep over at your place?')">
+          🔊 Ouvir versões naturais
+        </button>
+      </div>
+    </section>
+
+    <!-- FICAR = STAY / REMAIN -->
+    <section class="card-inner" id="tab-stay" style="display:none;">
+      <h2 class="section-title">2. FICAR = STAY / REMAIN (continuar no lugar)</h2>
+      <p class="section-sub">
+        Quando é <strong>ficar e não sair</strong> de um lugar, geralmente é <strong>STAY</strong> ou <strong>REMAIN</strong>.
+      </p>
+
+      <div class="sub-block">
+        <div class="sub-title">2.1. Casa, trabalho, festa</div>
+        <div class="two-cols">
+          <div class="col">
+            <p class="example-en">
+              <span class="good">I’m tired. I’ll stay home tonight.</span><br>
+              <span class="example-pt">Vou ficar em casa hoje à noite.</span>
+            </p>
+            <p class="example-en">
+              <span class="good">You can stay at the office if you want.</span><br>
+              <span class="example-pt">Você pode ficar no escritório se quiser.</span>
+            </p>
+          </div>
+          <div class="col">
+            <p class="example-en">
+              <span class="good">Let’s stay here a little longer.</span><br>
+              <span class="example-pt">Vamos ficar aqui mais um pouco.</span>
+            </p>
+            <p class="example-en">
+              <span class="good">He remained in Brazil for six months.</span><br>
+              <span class="example-pt">Ele ficou no Brasil por seis meses. (tom mais formal)</span>
+            </p>
+          </div>
+        </div>
+        <button class="play-btn" onclick="speak('I will stay home tonight. You can stay at the office. Let’s stay here a little longer.')">
+          🔊 Ouvir STAY
+        </button>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-title">2.2. Atenção: “be” também resolve</div>
+        <p class="example-pt">
+          Às vezes em inglês eles nem usam <strong>stay</strong>, só o <strong>be</strong> no presente:
+        </p>
+        <p class="example-en">
+          <span class="bad">I stay at home every weekend.</span> ❌ (soa estranho, parece hotel) <br>
+          <span class="good">I’m at home every weekend.</span> ✅ (eu fico em casa TODO fim de semana)
+        </p>
+      </div>
+    </section>
+
+    <!-- FICAR = BECOME / GET -->
+    <section class="card-inner" id="tab-become" style="display:none;">
+      <h2 class="section-title">3. FICAR = BECOME / GET (ficar triste, bravo, velho)</h2>
+      <p class="section-sub">
+        Quando “ficar” é <strong>mudança de estado</strong> (emoção, condição, aparência), pensa em:
+      </p>
+      <div class="highlight-expression">
+        FICAR + adjetivo = <span>GET</span> (fala do dia a dia) ou <span>BECOME</span> (mais formal)
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-title">3.1. Emoções</div>
+        <p class="example-en">
+          <span class="good">I got scared.</span> – Fiquei com medo.<br>
+          <span class="good">She got angry.</span> – Ela ficou brava.<br>
+          <span class="good">We got excited about the trip.</span> – A gente ficou animado com a viagem.
+        </p>
+        <button class="play-btn" onclick="speak('I got scared. She got angry. We got excited about the trip.')">
+          🔊 Ouvir GET + adjetivo
+        </button>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-title">3.2. Estado físico / idade</div>
+        <p class="example-en">
+          <span class="good">He got sick.</span> – Ele ficou doente.<br>
+          <span class="good">My grandfather is getting old.</span> – Meu avô está ficando velho.<br>
+          <span class="good">It became difficult to stay calm.</span> – Ficou difícil manter a calma. (BECAME mais formal)
+        </p>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-title">3.3. Erros comuns</div>
+        <p class="example-en">
+          <span class="bad">I stayed sad.</span> ❌ (literal demais)<br>
+          <span class="good">I got sad.</span> ✅
+        </p>
+      </div>
+    </section>
+
+    <!-- FICAR = KEEP -->
+    <section class="card-inner" id="tab-keep" style="display:none;">
+      <h2 class="section-title">4. FICAR = KEEP (manter, guardar, ficar com algo)</h2>
+      <p class="section-sub">
+        Quando “ficar” é “ficar com algo / guardar / manter”, a chave é <strong>KEEP</strong>.
+      </p>
+
+      <div class="sub-block">
+        <div class="sub-title">4.1. Manter ligado, aberto, limpo</div>
+        <p class="example-en">
+          <span class="good">Keep the door open.</span> – Deixa a porta <strong>ficar</strong> aberta.<br>
+          <span class="good">Keep the lights on.</span> – Deixa as luzes <strong>ficarem</strong> acesas.<br>
+          <span class="good">I try to keep my room clean.</span> – Eu tento fazer meu quarto <strong>ficar</strong> limpo.
+        </p>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-title">4.2. Ficar com o troco / ficar com o livro</div>
+        <p class="example-en">
+          <span class="good">You can keep the change.</span> – Pode ficar com o troco.<br>
+          <span class="good">You can keep the book.</span> – Você pode ficar com o livro.
+        </p>
+        <button class="play-btn" onclick="speak('You can keep the change. You can keep the book.')">
+          🔊 Ouvir KEEP
+        </button>
+      </div>
+    </section>
+
+    <!-- FICAR = BE (LOCATION) -->
+    <section class="card-inner" id="tab-place" style="display:none;">
+      <h2 class="section-title">5. FICAR = BE (localização fixa)</h2>
+      <p class="section-sub">
+        Quando é “onde <strong>fica</strong> a sua casa, a empresa, a escola”, inglês usa só o <strong>BE</strong>.
+      </p>
+
+      <div class="sub-block">
+        <div class="sub-title">5.1. Casa, empresa, cidade</div>
+        <p class="example-en">
+          <span class="good">My house is in São Paulo.</span> – Minha casa fica em São Paulo.<br>
+          <span class="good">The office is downtown.</span> – O escritório fica no centro.<br>
+          <span class="good">The restaurant is next to the bank.</span> – O restaurante fica do lado do banco.
+        </p>
+        <p class="example-en">
+          <span class="bad">My house stays in São Paulo.</span> ❌ (não use STAY aqui)
+        </p>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-title">5.2. Distância</div>
+        <p class="example-en">
+          <span class="good">The hotel is 10 minutes from here.</span> – O hotel fica a 10 minutos daqui.<br>
+          <span class="good">The school is far from my house.</span> – A escola fica longe da minha casa.
+        </p>
+      </div>
+    </section>
+
+    <!-- SLEEP OVER / STAY OVER -->
+    <section class="card-inner" id="tab-sleep" style="display:none;">
+      <h2 class="section-title">6. FICAR NA CASA DE ALGUÉM = sleep over / stay over</h2>
+      <p class="section-sub">
+        Quando “ficar” é <strong>dormir</strong> na casa de alguém, inglês gosta de:
+        <strong>sleep over / stay over</strong>.
+      </p>
+
+      <div class="sub-block">
+        <div class="sub-title">6.1. Amigos, família</div>
+        <p class="example-en">
+          <span class="good">Can I sleep over at your place?</span> – Posso ficar na sua casa? (dormir lá)<br>
+          <span class="good">He’s staying over at his cousin’s tonight.</span> – Ele vai ficar na casa do primo hoje.
+        </p>
+        <p class="example-en">
+          <span class="bad">Can I stay in your house?</span> 🤨 (pode ser entendido, mas não parece “dormir”)<br>
+        </p>
+        <button class="play-btn" onclick="speak('Can I sleep over at your place? He is staying over at his cousin’s tonight.')">
+          🔊 Ouvir sleep over / stay over
+        </button>
+      </div>
+    </section>
+
+    <!-- FICAR COM ALGUÉM = HOOK UP -->
+    <section class="card-inner" id="tab-hookup" style="display:none;">
+      <h2 class="section-title">7. “Ficar com alguém” – hook up / make out / see someone</h2>
+      <p class="section-sub">
+        Aqui é onde brasileiro <strong>mais se complica</strong>.  
+        “Ficar com alguém” (beijar, às vezes rolar algo mais) não tem <strong>uma</strong> palavra mágica em inglês.
+      </p>
+
+      <div class="sub-block">
+        <div class="sub-title">7.1. Opções mais usadas (sem traduzir “ficar”)</div>
+        <p class="example-en">
+          <span class="good">We hooked up at the party.</span><br>
+          <span class="example-pt">A gente ficou na festa. (beijou, rolou algo – contexto importa)</span><br><br>
+
+          <span class="good">They made out last night.</span><br>
+          <span class="example-pt">Eles ficaram ontem à noite. (beijando)</span><br><br>
+
+          <span class="good">She’s seeing someone.</span><br>
+          <span class="example-pt">Ela está ficando com alguém. (mais contínuo, tipo “saindo com”)</span>
+        </p>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-title">7.2. Erros comuns de brasileiro</div>
+        <p class="example-en">
+          <span class="bad">I stayed with her at the party.</span> ❌ (soa “eu fiquei ao lado dela”)<br>
+          <span class="good">I hooked up with her at the party.</span> ✅<br><br>
+
+          <span class="bad">I’m staying with a guy.</span> ❌ (parece morar junto / hospedado)<br>
+          <span class="good">I’m seeing a guy.</span> ✅ (estou ficando / saindo com um cara)
+        </p>
+        <button class="play-btn" onclick="speak('We hooked up at the party. They made out last night. She is seeing someone.')">
+          🔊 Ouvir “ficar com alguém”
+        </button>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-title">7.3. Dica pra brasileiros</div>
+        <p class="example-pt">
+          Não tente achar “a tradução” de <strong>ficar com alguém</strong>.  
+          Pense assim:
+        </p>
+        <ul>
+          <li>Só beijo / pegação na festa → <span class="good">hook up / make out</span></li>
+          <li>Já saindo com frequência, meio namoro aberto → <span class="good">see someone</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SITUAÇÕES REAIS -->
+    <section class="card-inner" id="tab-situations" style="display:none;">
+      <h2 class="section-title">8. Situações reais com FICAR</h2>
+      <p class="section-sub">
+        Agora você vai viver cenas reais, do jeito que um brasileiro vive: família, trabalho, viagem, relacionamento.
+      </p>
+
+      <div class="sub-block">
+        <div class="sub-title">8.1. Trabalho – reunião longa</div>
+        <p class="example-en">
+          <span class="good">I have to stay at the office until 8.</span><br>
+          <span class="example-pt">Tenho que ficar no escritório até as 8.</span><br><br>
+
+          <span class="good">I got really tired after the meeting.</span><br>
+          <span class="example-pt">Fiquei muito cansado depois da reunião.</span>
+        </p>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-title">8.2. Família – viagem e localização</div>
+        <p class="example-en">
+          <span class="good">My parents live in Recife. The house is near the beach.</span><br>
+          <span class="example-pt">Meus pais moram em Recife. A casa deles fica perto da praia.</span><br><br>
+
+          <span class="good">When I visit them, I always sleep over at their place.</span><br>
+          <span class="example-pt">Quando visito, eu sempre fico lá (durmo na casa deles).</span>
+        </p>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-title">8.3. Festa – “ficar com”</div>
+        <p class="example-en">
+          <span class="good">We met at a party and we hooked up.</span><br>
+          <span class="example-pt">A gente se conheceu numa festa e ficou.</span><br><br>
+
+          <span class="good">Now we’re seeing each other.</span><br>
+          <span class="example-pt">Agora a gente está ficando / saindo.</span>
+        </p>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-title">8.4. Emoções – dia ruim</div>
+        <p class="example-en">
+          <span class="good">I lost my wallet and I got really stressed.</span><br>
+          <span class="example-pt">Perdi minha carteira e fiquei muito estressado.</span><br><br>
+
+          <span class="good">Things got better after I talked to my friend.</span><br>
+          <span class="example-pt">As coisas ficaram melhores depois que falei com meu amigo.</span>
+        </p>
+        <button class="play-btn" onclick="speak('I have to stay at the office. I got really tired. We hooked up at a party. Now we are seeing each other.')">
+          🔊 Ouvir mix de situações
+        </button>
+      </div>
+    </section>
+
+    <!-- WRITE -->
+    <section class="card-inner" id="tab-write" style="display:none;">
+      <h2 class="section-title">9. Write it – sua vida com FICAR em inglês</h2>
+      <p class="section-sub">
+        Escreva 6–10 frases suas usando FICAR em inglês: ficar em casa, ficar bravo, ficar com alguém,
+        ficar na casa de um amigo, onde sua casa fica, etc.
+      </p>
+      <div class="textarea-wrap">
+        <textarea id="write-area" placeholder="Ex: I usually stay home on Sundays.&#10;I got nervous before the interview.&#10;My office is in São Paulo.&#10;Sometimes I sleep over at my friend’s place.&#10;We hooked up at a party, now we are seeing each other."></textarea>
+        <div id="char-counter" class="char-counter">0 caracteres</div>
+      </div>
+    </section>
+
+    <!-- PRACTICE -->
+    <section class="card-inner" id="tab-practice" style="display:none;">
+      <h2 class="section-title">10. Speak it – põe o FICAR na boca 🎙️</h2>
+      <p class="section-sub">
+        Use o botão como compromisso mental: enquanto estiver vermelho, você fala em voz alta,
+        sem parar, usando todas as versões de FICAR desta lição.
+      </p>
+
+      <div class="sub-block">
+        <div class="sub-title">10.1. Mantra rápido</div>
+        <p class="example-en">
+          “I’ll stay home.” · “I got tired.” · “Keep the door open.” ·<br>
+          “My house is in São Paulo.” · “Can I sleep over?” · “We hooked up at the party.”
+        </p>
+        <button class="play-btn" onclick="speak('I will stay home. I got tired. Keep the door open. My house is in São Paulo. Can I sleep over? We hooked up at the party.')">
+          🔊 Ouvir mantra
+        </button>
+      </div>
+
+      <div class="practice-row">
+        <button class="record-btn" id="record-btn" onclick="toggleRecord()">
+          <span id="record-dot">⏺️</span>
+          <span id="record-text">Marcar momento de prática</span>
+        </button>
+        <div class="audio-wrapper">
+          <div id="audio-status">
+            Nenhum áudio real é gravado – é só um gatilho mental.  
+            Enquanto estiver vermelho, fale em voz alta por 30–60 segundos frases com:
+            <strong>stay / get / become / keep / be / sleep over / hook up / see someone</strong>. 🎧
+          </div>
+          <button class="delete-btn" onclick="resetPractice()">Resetar status de prática</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="footer-nav">
+    <button class="secondary-btn" onclick="prevTab()">⬅️ Voltar aba</button>
+    <button class="primary-btn" onclick="nextTab()">Próxima aba ➡️</button>
+  </div>
+
+  <div class="export-bar">
+    <span>📋 Copiar para planilha:</span>
+    <button class="small-btn" onclick="copyToSpreadsheet()">Copiar texto da lição</button>
+    <span>• 📄 PDF: use o botão “Exportar em PDF” no topo (print do navegador).</span>
+  </div>
+
+  <footer class="footer-meta">
+    Criado para o app futurista <span class="brand">NEXTATION</span> – FICAR explicado em múltiplos sentidos,
+    do jeito que o cérebro brasileiro realmente usa. É nosso. 🚀
+  </footer>
+</div>
+
+<script>
+  const tabOrder = ['overview','stay','become','keep','place','sleep','hookup','situations','write','practice'];
+
+  function showTab(id){
+    document.querySelectorAll('.card-inner').forEach(el => el.style.display='none');
+    const target = document.getElementById('tab-'+id);
+    if(target) target.style.display='block';
+
+    document.querySelectorAll('.tab').forEach(t=>{
+      const isActive = t.dataset.tab === id;
+      t.classList.toggle('active', isActive);
+      if(isActive) t.classList.add('completed');
+      t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+  }
+
+  function nextTab(){
+    const active = document.querySelector('.tab.active');
+    if(!active) return;
+    const idx = tabOrder.indexOf(active.dataset.tab);
+    if(idx < tabOrder.length-1) showTab(tabOrder[idx+1]);
+  }
+
+  function prevTab(){
+    const active = document.querySelector('.tab.active');
+    if(!active) return;
+    const idx = tabOrder.indexOf(active.dataset.tab);
+    if(idx > 0) showTab(tabOrder[idx-1]);
+  }
+
+  function speak(text){
+    if(!('speechSynthesis' in window)){
+      alert('Seu navegador não suporta áudio (SpeechSynthesis).');
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-US';
+    u.rate = 0.98;
+    u.pitch = 1.0;
+    window.speechSynthesis.speak(u);
+  }
+
+  const writeArea = document.getElementById('write-area');
+  const counterEl = document.getElementById('char-counter');
+  if(writeArea && counterEl){
+    writeArea.addEventListener('input', () => {
+      counterEl.textContent = writeArea.value.length + ' caracteres';
+    });
+  }
+
+  let recording = false;
+  function toggleRecord(){
+    recording = !recording;
+    const btn = document.getElementById('record-btn');
+    const txt = document.getElementById('record-text');
+    const dot = document.getElementById('record-dot');
+    const status = document.getElementById('audio-status');
+    if(!btn || !txt || !dot || !status) return;
+
+    if(recording){
+      btn.classList.add('recording');
+      dot.textContent = '🔴';
+      txt.textContent = 'Praticando agora...';
+      status.textContent = 'Momento de prática: fale em voz alta suas frases com FICAR (stay, become, keep, be, sleep over, hook up) por pelo menos 30 segundos.';
+    }else{
+      btn.classList.remove('recording');
+      dot.textContent = '⏺️';
+      txt.textContent = 'Marcar momento de prática';
+      status.textContent = 'Prática pausada. Clique de novo quando quiser focar na fala.';
+    }
+  }
+
+  function resetPractice(){
+    recording = false;
+    const btn = document.getElementById('record-btn');
+    const txt = document.getElementById('record-text');
+    const dot = document.getElementById('record-dot');
+    const status = document.getElementById('audio-status');
+    if(!btn || !txt || !dot || !status) return;
+
+    btn.classList.remove('recording');
+    dot.textContent = '⏺️';
+    txt.textContent = 'Marcar momento de prática';
+    status.textContent = 'Nenhum áudio real é gravado – use o botão como compromisso de prática em voz alta.';
+  }
+
+  function copyToSpreadsheet(){
+    const text = collectLessonText();
+    if(!navigator.clipboard){
+      alert('Seu navegador não permite cópia automática. Selecione o texto manualmente.');
+      return;
+    }
+    navigator.clipboard.writeText(text).then(()=>{
+      alert('Conteúdo copiado! Cole (Ctrl+V) na sua planilha.');
+    }).catch(()=>{
+      alert('Não foi possível copiar automaticamente. Selecione e copie manualmente.');
+    });
+  }
+
+  function collectLessonText(){
+    const blocks = [];
+    document.querySelectorAll('.card-inner').forEach(inner=>{
+      const clone = inner.cloneNode(true);
+      clone.querySelectorAll('button').forEach(b=>b.remove());
+      clone.querySelectorAll('.pill-tag').forEach(p=>p.remove());
+      blocks.push(clone.innerText.trim());
+    });
+    return blocks.join('\n\n-----------------------------\n\n');
+  }
+</script>
+</body>
+</html>
